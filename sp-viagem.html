@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>SP Adventure • Abr 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#080C10;--bg2:#0F1520;--bg3:#161E2C;--bg4:#1C2638;
+  --gold:#F0A500;--gold2:#FFB733;--coral:#E8572A;--green:#2ECC71;--blue:#4DA6FF;--purple:#9B72FF;
+  --text:#EEF2F7;--text2:#8A9BB0;--text3:#5A6B80;
+  --border:rgba(255,255,255,0.06);--border2:rgba(255,255,255,0.12);
+  --r:14px;--r2:20px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden;}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:200;background:rgba(8,12,16,0.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 clamp(1rem,4vw,2.5rem);display:flex;align-items:center;gap:1rem;height:58px;}
+.logo{font-family:'Syne',sans-serif;font-size:1.15rem;font-weight:800;letter-spacing:-0.5px;white-space:nowrap;}
+.logo em{color:var(--gold);font-style:normal;}
+.tabs{display:flex;gap:3px;flex:1;justify-content:center;}
+.tab{padding:7px 18px;border-radius:8px;cursor:pointer;font-size:0.83rem;color:var(--text2);border:none;background:none;font-family:'DM Sans',sans-serif;transition:all .2s;white-space:nowrap;}
+.tab:hover{background:var(--bg3);color:var(--text);}
+.tab.on{background:var(--gold);color:#000;font-weight:500;}
+.nav-dt{font-size:0.78rem;color:var(--text3);white-space:nowrap;}
+
+/* HERO */
+.hero{padding:clamp(2rem,5vw,3.5rem) clamp(1rem,4vw,2.5rem) 2rem;max-width:960px;margin:0 auto;}
+.hero-tag{display:inline-flex;align-items:center;gap:6px;background:rgba(240,165,0,0.12);color:var(--gold);border:1px solid rgba(240,165,0,0.25);padding:5px 14px;border-radius:20px;font-size:0.75rem;letter-spacing:1.2px;text-transform:uppercase;margin-bottom:1.2rem;}
+.hero h1{font-family:'Syne',sans-serif;font-size:clamp(2.4rem,6vw,4rem);font-weight:800;line-height:1.0;margin-bottom:.6rem;}
+.hero h1 em{color:var(--gold);font-style:normal;}
+.hero-sub{color:var(--text2);font-size:1rem;margin-bottom:2rem;}
+.hero-stats{display:flex;gap:2.5rem;flex-wrap:wrap;}
+.stat-n{font-family:'Syne',sans-serif;font-size:2.2rem;font-weight:800;color:var(--gold);line-height:1;}
+.stat-l{font-size:0.78rem;color:var(--text3);margin-top:2px;}
+
+/* CHANGES BANNER */
+.changes-banner{max-width:960px;margin:0 auto 0;padding:0 clamp(1rem,4vw,2.5rem);}
+.cb-inner{background:rgba(46,204,113,0.07);border:1px solid rgba(46,204,113,0.2);border-radius:var(--r);padding:1rem 1.25rem;margin-bottom:2rem;}
+.cb-title{font-size:0.75rem;font-weight:500;color:var(--green);text-transform:uppercase;letter-spacing:1px;margin-bottom:.5rem;}
+.cb-list{display:flex;flex-wrap:wrap;gap:.5rem;}
+.cb-tag{background:rgba(46,204,113,0.1);color:var(--green);border:1px solid rgba(46,204,113,0.2);padding:3px 10px;border-radius:20px;font-size:0.78rem;}
+.cb-tag.warn{background:rgba(240,165,0,0.1);color:var(--gold);border-color:rgba(240,165,0,0.2);}
+
+/* VIEW */
+.view{display:none;max-width:960px;margin:0 auto;padding:0 clamp(1rem,4vw,2.5rem) 5rem;}
+.view.on{display:block;}
+
+/* CRONOGRAMA */
+.day{margin-bottom:3rem;}
+.day-hd{display:flex;align-items:center;gap:1rem;padding-bottom:.9rem;border-bottom:1px solid var(--border);margin-bottom:1.2rem;}
+.day-num{font-family:'Syne',sans-serif;font-size:1.9rem;font-weight:800;color:var(--gold);min-width:72px;line-height:1;}
+.day-dow{font-size:0.7rem;text-transform:uppercase;letter-spacing:1px;color:var(--text3);}
+.day-theme{font-family:'Syne',sans-serif;font-size:1.15rem;font-weight:700;margin-top:1px;}
+.day-count{margin-left:auto;background:var(--bg3);border:1px solid var(--border);padding:4px 12px;border-radius:20px;font-size:0.75rem;color:var(--text2);white-space:nowrap;}
+.events{display:flex;flex-direction:column;gap:8px;}
+.ecard{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;cursor:pointer;display:flex;align-items:center;gap:12px;transition:all .18s;position:relative;overflow:visible;}
+.ecard:hover{background:var(--bg3);border-color:rgba(240,165,0,.25);transform:translateX(5px);}
+.ecard.new-item{border-color:rgba(46,204,113,.25);}
+.ecard.moved-item{border-color:rgba(77,166,255,.25);}
+.badge{position:absolute;top:-9px;right:14px;font-size:0.62rem;padding:2px 9px;border-radius:10px;text-transform:uppercase;letter-spacing:.5px;font-weight:500;}
+.badge.new-b{background:var(--green);color:#000;}
+.badge.moved-b{background:var(--blue);color:#000;}
+.badge.warn-b{background:var(--gold);color:#000;}
+.e-ico{font-size:1.4rem;min-width:34px;text-align:center;}
+.e-info{flex:1;min-width:0;}
+.e-name{font-size:.92rem;font-weight:500;}
+.e-addr{font-size:.76rem;color:var(--text2);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.e-time{font-family:'Syne',sans-serif;font-size:.82rem;color:var(--gold);padding:5px 10px;border-radius:8px;border:1px solid transparent;min-width:58px;text-align:center;cursor:pointer;transition:all .18s;white-space:nowrap;}
+.e-time:hover{border-color:var(--gold);background:rgba(240,165,0,.1);}
+.e-arr{color:var(--text3);font-size:.85rem;margin-left:2px;}
+
+/* MODAL */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:400;display:flex;align-items:center;justify-content:center;padding:1rem;opacity:0;pointer-events:none;transition:opacity .25s;}
+.overlay.on{opacity:1;pointer-events:all;}
+.modal-wrap{position:relative;width:100%;max-width:580px;}
+.modal{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--r2);overflow:hidden;max-height:88vh;overflow-y:auto;transform:translateY(18px);transition:transform .25s;}
+.overlay.on .modal{transform:translateY(0);}
+.modal-img{width:100%;height:210px;object-fit:cover;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:5rem;}
+.modal-img img{width:100%;height:210px;object-fit:cover;display:block;}
+.modal-body{padding:1.5rem;}
+.m-cat{font-size:.7rem;text-transform:uppercase;letter-spacing:1.2px;color:var(--text3);margin-bottom:.4rem;}
+.m-title{font-family:'Syne',sans-serif;font-size:1.7rem;font-weight:800;margin-bottom:.3rem;line-height:1.1;}
+.m-addr{font-size:.82rem;color:var(--text2);margin-bottom:.9rem;}
+.metro-pills{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:1.2rem;}
+.metro-pill{display:inline-flex;align-items:center;gap:5px;background:rgba(240,165,0,.1);border:1px solid rgba(240,165,0,.22);color:var(--gold);padding:4px 12px;border-radius:20px;font-size:.76rem;}
+.msec{margin-bottom:1.1rem;}
+.msec-t{font-size:.7rem;text-transform:uppercase;letter-spacing:1px;color:var(--text3);margin-bottom:.4rem;}
+.msec-c{font-size:.88rem;line-height:1.65;color:#C5CDD8;}
+.m-close{position:absolute;top:10px;right:10px;background:rgba(0,0,0,.6);border:none;color:#fff;width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:.95rem;display:flex;align-items:center;justify-content:center;transition:background .2s;}
+.m-close:hover{background:rgba(232,87,42,.7);}
+
+/* TIME EDIT */
+.te-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:500;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s;}
+.te-overlay.on{opacity:1;pointer-events:all;}
+.te-box{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--r);padding:1.5rem;width:280px;transform:scale(.92);transition:transform .2s;}
+.te-overlay.on .te-box{transform:scale(1);}
+.te-title{font-family:'Syne',sans-serif;font-weight:700;margin-bottom:1rem;font-size:.95rem;}
+.te-input{width:100%;background:var(--bg3);border:1px solid var(--gold);border-radius:10px;padding:.8rem;color:var(--text);font-size:1.15rem;font-family:'Syne',sans-serif;text-align:center;outline:none;}
+.te-btns{display:flex;gap:8px;margin-top:.9rem;}
+.btn-ok{flex:1;background:var(--gold);color:#000;border:none;padding:.65rem;border-radius:9px;cursor:pointer;font-weight:500;font-family:'DM Sans',sans-serif;}
+.btn-cancel{flex:1;background:var(--bg3);color:var(--text);border:1px solid var(--border);padding:.65rem;border-radius:9px;cursor:pointer;font-family:'DM Sans',sans-serif;}
+.btn-ok:hover{background:var(--gold2);}
+
+/* CALENDAR */
+.cal-hd{font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:700;margin-bottom:1.5rem;}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;}
+.cal-dw{text-align:center;font-size:.68rem;text-transform:uppercase;color:var(--text3);padding:.4rem 0;letter-spacing:.8px;}
+.cal-d{aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:10px;font-size:.82rem;cursor:default;position:relative;}
+.cal-d.trip{background:var(--bg2);border:1px solid var(--border);cursor:pointer;transition:all .18s;}
+.cal-d.trip:hover{border-color:var(--gold);background:var(--bg3);}
+.cal-d.sel{background:rgba(240,165,0,.15)!important;border-color:var(--gold)!important;}
+.cal-dots{display:flex;gap:3px;margin-top:3px;flex-wrap:wrap;justify-content:center;}
+.cal-dot{width:4px;height:4px;border-radius:50%;background:var(--gold);}
+.cal-panel{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:1.4rem;margin-top:1.5rem;}
+.cal-panel-hd{font-family:'Syne',sans-serif;font-weight:700;font-size:1.05rem;margin-bottom:1rem;}
+.cal-ev{display:flex;align-items:center;gap:10px;padding:.7rem 0;border-bottom:1px solid var(--border);cursor:pointer;transition:opacity .15s;}
+.cal-ev:last-child{border-bottom:none;}
+.cal-ev:hover{opacity:.7;}
+.cal-hint{text-align:center;color:var(--text3);padding:2.5rem 0;font-size:.88rem;}
+
+/* NOTES */
+.notes-add{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:1.4rem;margin-bottom:2rem;}
+.notes-add h3{font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:700;margin-bottom:1rem;}
+.inp-lbl{display:block;font-size:.76rem;color:var(--text2);margin-bottom:.35rem;}
+.inp-wrap{margin-bottom:.9rem;}
+.inp{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:.7rem .95rem;color:var(--text);font-size:.9rem;font-family:'DM Sans',sans-serif;transition:border-color .18s;resize:none;outline:none;}
+.inp:focus{border-color:var(--gold);}
+.inp-row{display:flex;gap:10px;}
+.inp-row .inp-wrap{flex:1;}
+.btn-add-note{background:var(--gold);color:#000;border:none;padding:.75rem 1.6rem;border-radius:10px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .18s;}
+.btn-add-note:hover{background:var(--gold2);}
+.notes-list{display:flex;flex-direction:column;gap:10px;}
+.note{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:1.2rem;}
+.note-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:.7rem;}
+.n-author{display:flex;align-items:center;gap:8px;font-size:.85rem;font-weight:500;}
+.avatar{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:700;flex-shrink:0;}
+.av0{background:rgba(240,165,0,.18);color:var(--gold);}
+.av1{background:rgba(232,87,42,.18);color:var(--coral);}
+.av2{background:rgba(46,204,113,.18);color:var(--green);}
+.av3{background:rgba(77,166,255,.18);color:var(--blue);}
+.av4{background:rgba(155,114,255,.18);color:var(--purple);}
+.n-date{font-size:.72rem;color:var(--text3);}
+.n-del{background:none;border:none;color:var(--text3);cursor:pointer;padding:3px 7px;border-radius:6px;font-size:.8rem;transition:all .18s;}
+.n-del:hover{color:var(--coral);background:rgba(232,87,42,.1);}
+.n-text{font-size:.88rem;line-height:1.6;color:#B8C5D6;}
+.notes-empty{text-align:center;color:var(--text3);padding:3rem 0;font-size:.88rem;}
+
+/* LEGEND */
+.legend{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:1.5rem;}
+.leg-item{display:flex;align-items:center;gap:6px;font-size:.75rem;color:var(--text2);}
+.leg-dot{width:8px;height:8px;border-radius:50%;}
+
+/* PARTICIPANTS EDITOR */
+.part-editor{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:1.2rem;margin-bottom:1.5rem;}
+.part-editor h3{font-family:'Syne',sans-serif;font-size:.9rem;font-weight:700;color:var(--text2);margin-bottom:.9rem;}
+.part-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px;}
+.part-item{display:flex;align-items:center;gap:8px;}
+.part-item .avatar{cursor:default;}
+
+/* FOOTER */
+footer{text-align:center;color:var(--text3);font-size:.78rem;padding:2rem;border-top:1px solid var(--border);margin-top:2rem;}
+footer a{color:var(--gold);text-decoration:none;}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:3px;}
+
+@media(max-width:600px){
+  nav{gap:.6rem;}
+  .logo{font-size:1rem;}
+  .tab{padding:6px 12px;font-size:.78rem;}
+  .nav-dt{display:none;}
+  .hero h1{font-size:2.2rem;}
+  .e-addr{max-width:140px;}
+  .modal-wrap{max-width:100%;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">SP<em>★</em>26</div>
+  <div class="tabs">
+    <button class="tab on" onclick="setView('cron',this)">📅 Cronograma</button>
+    <button class="tab" onclick="setView('cal',this)">🗓️ Calendário</button>
+    <button class="tab" onclick="setView('notes',this)">💬 Notas</button>
+  </div>
+  <div class="nav-dt">3–12 Abr 2026</div>
+</nav>
+
+<div class="hero">
+  <div class="hero-tag">🌆 São Paulo • Abril 2026</div>
+  <h1>Nossa<br><em>Aventura</em></h1>
+  <p class="hero-sub">3 a 12 de Abril de 2026 &nbsp;·&nbsp; 4 viajantes</p>
+  <div class="hero-stats">
+    <div><div class="stat-n">10</div><div class="stat-l">dias</div></div>
+    <div><div class="stat-n">4</div><div class="stat-l">viajantes</div></div>
+    <div><div class="stat-n">35+</div><div class="stat-l">lugares</div></div>
+  </div>
+</div>
+
+<div class="changes-banner" id="changesDiv">
+  <div class="cb-inner">
+    <div class="cb-title">✦ Revisões feitas no roteiro</div>
+    <div class="cb-list">
+      <span class="cb-tag">🐒 Zoológico → terça (dia útil)</span>
+      <span class="cb-tag">🛍️ Rua 25 de Março adicionada na quinta</span>
+      <span class="cb-tag">🍽️ Jantar na chegada (Sex 18h)</span>
+      <span class="cb-tag">🎨 Proximidade entre locais otimizada</span>
+      <span class="cb-tag">✦ Novas sugestões marcadas em verde</span>
+      <span class="cb-tag warn">⚠️ Conferir disponibilidade da Exposição Titanic em abril</span>
+    </div>
+  </div>
+</div>
+
+<!-- CRONOGRAMA VIEW -->
+<div id="view-cron" class="view on">
+  <div class="legend">
+    <div class="leg-item"><div class="leg-dot" style="background:var(--green)"></div>Sugestão nova</div>
+    <div class="leg-item"><div class="leg-dot" style="background:var(--blue)"></div>Realocado</div>
+    <div class="leg-item"><div class="leg-dot" style="background:var(--gold)"></div>Clique no horário para editar</div>
+  </div>
+  <div id="cronContainer"></div>
+</div>
+
+<!-- CALENDAR VIEW -->
+<div id="view-cal" class="view">
+  <div class="cal-hd">Abril 2026</div>
+  <div class="cal-grid" id="calGrid"></div>
+  <div id="calPanel"></div>
+</div>
+
+<!-- NOTES VIEW -->
+<div id="view-notes" class="view">
+  <div class="part-editor">
+    <h3>👥 Editar nomes dos participantes</h3>
+    <div class="part-grid" id="partGrid"></div>
+  </div>
+  <div class="notes-add">
+    <h3>💬 Adicionar Nota ou Sugestão</h3>
+    <div class="inp-row">
+      <div class="inp-wrap">
+        <label class="inp-lbl">Quem está escrevendo?</label>
+        <select class="inp" id="noteWho" style="cursor:pointer"></select>
+      </div>
+      <div class="inp-wrap">
+        <label class="inp-lbl">Dia relacionado (opcional)</label>
+        <select class="inp" id="noteDay" style="cursor:pointer">
+          <option value="">Geral</option>
+        </select>
+      </div>
+    </div>
+    <div class="inp-wrap">
+      <label class="inp-lbl">Sua nota, dica ou sugestão</label>
+      <textarea class="inp" id="noteText" rows="3" placeholder="Ex: Reservar ingresso MASP com antecedência! Levar repelente no dia do Zôo. Pesquisar balada para sábado…"></textarea>
+    </div>
+    <button class="btn-add-note" onclick="addNote()">Adicionar nota ✦</button>
+  </div>
+  <div class="notes-list" id="notesList"></div>
+</div>
+
+<!-- PLACE MODAL -->
+<div class="overlay" id="placeOverlay" onclick="closePlaceModal(event)">
+  <div class="modal-wrap">
+    <div class="modal" id="placeModal">
+      <div class="modal-img" id="mImg"></div>
+      <div class="modal-body">
+        <div class="m-cat" id="mCat"></div>
+        <div class="m-title" id="mTitle"></div>
+        <div class="m-addr" id="mAddr"></div>
+        <div class="metro-pills" id="mMetro"></div>
+        <div class="msec"><div class="msec-t">Sobre o lugar</div><div class="msec-c" id="mDesc"></div></div>
+        <div class="msec"><div class="msec-t">O que fazer</div><div class="msec-c" id="mWhat"></div></div>
+      </div>
+    </div>
+    <button class="m-close" onclick="closePlaceModal()">✕</button>
+  </div>
+</div>
+
+<!-- TIME EDIT -->
+<div class="te-overlay" id="teOverlay" onclick="if(event.target===this)closeTE()">
+  <div class="te-box">
+    <div class="te-title" id="teTitle">Editar horário</div>
+    <input type="time" class="te-input" id="teInput">
+    <div class="te-btns">
+      <button class="btn-cancel" onclick="closeTE()">Cancelar</button>
+      <button class="btn-ok" onclick="confirmTE()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<footer>Feito com ❤️ para a viagem de São Paulo 2026</footer>
+
+<script>
+const DAYS=[
+  {id:'d1',date:'03/04',full:'2026-04-03',dow:'Sexta-feira',theme:'Chegada em SP',emoji:'✈️',events:[
+    {id:'e01',name:'Chegada — Terminal Tietê',emoji:'🚌',time:'18:00',cat:'transporte',
+     addr:'Av. Cruzeiro do Sul, 1800 — Santana, São Paulo',
+     metro:['🔵 Tietê (Linha 1 — Azul)'],
+     desc:'Terminal de ônibus Tietê — o maior terminal interestadual de São Paulo, com conexão direta ao metrô. Localizado no bairro Santana, na zona norte.',
+     what:'Pegar a Linha 1 (Azul) sentido sul até Sé, depois baldeação para Linha 2 (Verde) e descer em Consolação. Trajeto de ~35 min. Guardar o cartão do metrô para usar toda a semana!'},
+    {id:'e02',name:'Check-in no Airbnb',emoji:'🏠',time:'19:00',cat:'hospedagem',
+     addr:'Rua Sergipe, 254 — 314, Consolação, São Paulo',
+     metro:['🟢 Consolação (Linha 2 — Verde)'],
+     desc:'Apartamento em Consolação, bairro central e bem localizado — a 5 min a pé da Rua Augusta, 10 min do MASP e perto de Vila Madalena. Uma das melhores localizações de SP.',
+     what:'Check-in, organizar malas e conhecer o apartamento. O bairro tem padarias, mercadinhos e restaurantes a 5 min a pé. Perfeito para começar a explorar SP a pé!'},
+    {id:'e03',name:'Supermercado',emoji:'🛒',time:'19:30',cat:'compras',
+     addr:'Rua da Consolação ou R. Augusta — próximo ao Airbnb',
+     metro:['🟢 Consolação (Linha 2 — Verde)'],
+     desc:'Fazer as compras para o café da manhã dos próximos dias — frutas, pão, frios, sucos e snacks. Há um Pão de Açúcar na R. da Consolação e pequenos mercados na região.',
+     what:'Comprar de uma vez para a semana: frutas tropicais, granola, iogurte, queijo, presunto, pão de queijo e suco. Assim o café da manhã no Airbnb fica prático e gostoso!'},
+    {id:'e04',name:'Jantar na Rua Augusta',emoji:'🍽️',time:'20:30',cat:'gastronomia',isNew:true,
+     addr:'Rua Augusta — Consolação, São Paulo',
+     metro:['🟢 Consolação (Linha 2 — Verde)'],
+     desc:'A Rua Augusta é um dos eixos mais vibrantes de SP, a 5 minutos a pé do Airbnb. De dia é elegante; de noite vira a rua mais boêmia da cidade com bares, pubs e restaurantes de todos os tipos.',
+     what:'Ótima opção para o primeiro jantar descontraído. Sugestões: Spot Bar (clássico paulistano), algum dos restaurantes árabes e japoneses da rua, ou simplesmente explorar e entrar onde tiver mais movimento!'},
+  ]},
+  {id:'d2',date:'04/04',full:'2026-04-04',dow:'Sábado',theme:'Vila Madalena 🎉',emoji:'🎨',events:[
+    {id:'e05',name:'Beco do Batman',emoji:'🎨',time:'10:00',cat:'cultura',
+     addr:'Rua Gonçalo Afonso — Vila Madalena, São Paulo',
+     metro:['🟢 Vila Madalena (Linha 2 — Verde)'],
+     desc:'Um dos maiores museus a céu aberto de street art da América Latina. O beco e as vielas ao redor são inteiramente cobertos de grafites de artistas renomados e emergentes, renovados constantemente.',
+     what:'Chegar às 10h para boa luz e menos multidão. Explorar todas as vielas ao redor — não só a rua principal! Levar o celular carregado para fotos. O beco tem várias entradas; pergunte aos moradores pelos caminhos. Reserve ~2h.'},
+    {id:'e06',name:'Vila Madalena — Exploração',emoji:'☕',time:'12:00',cat:'lazer',
+     addr:'Vila Madalena, São Paulo',
+     metro:['🟢 Vila Madalena (Linha 2 — Verde)'],
+     desc:'Bairro boêmio e artístico com galerias, restaurantes autorais, bares e lojas de design independente. Um dos bairros mais charmosos e agradáveis de São Paulo para caminhar.',
+     what:'Almoçar em algum restaurante do bairro (Chou, Basilicata, ou explorar as ruinhas). Visitar galerias de arte independentes. Passear pela Rua Wisard e adjacências. Tomar um café gourmet em alguma das cafeterias do bairro.'},
+    {id:'e07',name:'Happy Hour na Vila',emoji:'🍹',time:'17:00',cat:'gastronomia',isNew:true,
+     addr:'Vila Madalena — Bar Astor, Bar Filial ou similares',
+     metro:['🟢 Vila Madalena (Linha 2 — Verde)'],
+     desc:'A Vila Madalena tem uma das cenas de bares mais animadas de SP, perfeita para o happy hour antes da balada do aniversário! Bar Filial e Bar Astor são dois clássicos do bairro.',
+     what:'Experimentar caipirinhas artesanais e petiscos brasileiros. Bar Filial na Rua Fidalga é um ícone. Bar Astor na Rua Wisard tem ambiente ótimo. Preparar energia para a noite!'},
+    {id:'e08',name:'Balada',emoji:'💃',time:'23:00',cat:'lazer',
+     addr:'A definir — Vila Madalena ou Barra Funda',
+     metro:['🟢 Vila Madalena / 🔵 Marechal Deodoro (Barra Funda)'],
+     desc:'SP tem uma das melhores cenas noturnas do Brasil. A Vila Madalena tem bares e pequenas casas noturnas animadas; a Barra Funda concentra os grandes clubs como D-Edge e Garra.',
+     what:'Opções: D-Edge (referência em música eletrônica), A Lôca (LGBTQ+ friendly, muito animado), Cine Joia no centro (art deco incrível), ou ficar na Vila explorando os bares com música ao vivo. Verificar programação com antecedência!'},
+  ]},
+  {id:'d3',date:'05/04',full:'2026-04-05',dow:'Domingo',theme:'Avenida Paulista',emoji:'🚶',events:[
+    {id:'e09',name:'Avenida Paulista — Domingo',emoji:'🏙️',time:'10:00',cat:'cultura',
+     addr:'Av. Paulista — Bela Vista / Consolação, São Paulo',
+     metro:['🟢 Trianon-MASP ou Consolação (Linha 2 — Verde)'],
+     desc:'O coração financeiro e cultural de SP. Aos domingos a avenida é FECHADA para carros e vira um enorme espaço de lazer — ciclistas, patinadores, performers, food trucks e arte por toda parte.',
+     what:'Aproveitar a CicloFaixa de Domingo! Alugar bikes via Itaú Bike (estações na própria Paulista). Explorar as fachadas icônicas, FIESP (exposições gratuitas), livrarias e cafés. Um dos passeios mais especiais de SP!'},
+    {id:'e10',name:'MASP',emoji:'🖼️',time:'11:00',cat:'cultura',
+     addr:'Av. Paulista, 1578 — Bela Vista, São Paulo',
+     metro:['🟢 Trianon-MASP (Linha 2 — Verde)'],
+     desc:'Museu de Arte de São Paulo Assis Chateaubriand — um dos museus mais importantes da América Latina, com acervo de 10.000 obras. O edifício suspenso vermelho é uma das imagens mais icônicas da cidade.',
+     what:'Ver a coleção permanente com Picasso, Rembrandt, Monet, Degas, Tarsila do Amaral. Conferir a exposição temporária. A vista de baixo (sob o vão livre) é cinematográfica! Reserve 2-3h. Obs: entrada gratuita às terças.'},
+    {id:'e11',name:'IMS Paulista',emoji:'📷',time:'14:00',cat:'cultura',isNew:true,
+     addr:'Av. Paulista, 2424 — Consolação, São Paulo',
+     metro:['🟢 Consolação (Linha 2 — Verde)'],
+     desc:'Instituto Moreira Salles — espaço cultural gratuito dedicado à fotografia, música, literatura e cinema brasileiro. As exposições temporárias são de altíssimo nível e geralmente focadas em fotografia e arte brasileira.',
+     what:'Visitar a exposição em cartaz (sempre gratuito). Aproveitar o terraço com café e vista para a Paulista. Loja de livros e produtos de design excelente. Estima-se 1-1,5h. Localizado no mesmo quarteirão do Airbnb!'},
+    {id:'e12',name:'Food Trucks & CicloFaixa',emoji:'🚴',time:'16:00',cat:'lazer',isNew:true,
+     addr:'Av. Paulista — trecho central entre MASP e Consolação',
+     metro:['🟢 Trianon-MASP (Linha 2 — Verde)'],
+     desc:'Aos domingos, a Paulista vira um parque linear com food trucks de todo tipo, artistas de rua e espaço de lazer sem carros. Uma das experiências mais características de SP.',
+     what:'Experimentar os food trucks — açaí, tacos, doces, comida árabe. Tirar fotos no meio da avenida sem carros (foto épica!). Aproveitar o pôr do sol na Paulista — uma das vistas mais bonitas da cidade.'},
+  ]},
+  {id:'d4',date:'06/04',full:'2026-04-06',dow:'Segunda-feira',theme:'Parque Ibirapuera',emoji:'🌿',events:[
+    {id:'e13',name:'Parque Ibirapuera — Piquenique',emoji:'🧺',time:'10:00',cat:'natureza',
+     addr:'Av. Pedro Álvares Cabral, s/n — Vila Mariana, São Paulo',
+     metro:['🔴 Ana Rosa (Linha 2 — Verde) + ônibus ou Uber'],
+     desc:'O maior parque urbano de SP e um dos mais belos do Brasil — 160 hectares de área verde com lagos, museus, ciclovia e o famoso Auditório Oscar Niemeyer. Segunda é perfeito: bem menos gente!',
+     what:'Montar o piquenique nas gramadas próximas ao lago (levar esteira, comida e bebidas). Alugar pedalinho no lago. Explorar o interior do parque de bicicleta. Ver o Auditório Ibirapuera (projeto de Oscar Niemeyer). Não esquecer protetor solar!'},
+    {id:'e14',name:'Museu Afro-Brasil',emoji:'🏛️',time:'13:30',cat:'cultura',isNew:true,
+     addr:'Av. Pedro Álvares Cabral — Parque Ibirapuera, São Paulo',
+     metro:['🔴 Ana Rosa + ônibus (dentro do Ibirapuera)'],
+     desc:'Museu dedicado à história e cultura afro-brasileira, localizado dentro do Ibirapuera no Pavilhão Padre Manoel da Nóbrega. Acervo de mais de 3.000 peças de arte, objetos históricos e documentos.',
+     what:'Explorar a rica coleção sobre diáspora africana, escravidão, capoeira, religiões afro-brasileiras e arte contemporânea negra. Muito bem curado e emocionante. Entrada gratuita! Estima-se 1-2h.'},
+    {id:'e15',name:'Bikes no Parque',emoji:'🚵',time:'15:30',cat:'lazer',isNew:true,
+     addr:'Parque Ibirapuera — pontos de aluguel internos',
+     metro:['🔴 Ana Rosa + ônibus'],
+     desc:'O Ibirapuera tem ciclovia interna e pontos de aluguel de bikes. Ótima forma de cobrir toda a extensão do parque (que é enorme!) de maneira divertida.',
+     what:'Pedalar pelo parque, passar pelo Pavilhão da Bienal (Oscar Niemeyer), OCA e pelo Auditório. Aproveitar o pôr do sol no parque — luz dourada entre as árvores. Lindo para fotos e para encerrar o dia.'},
+  ]},
+  {id:'d5',date:'07/04',full:'2026-04-07',dow:'Terça-feira',theme:'Zoológico & Jardim Botânico',emoji:'🐒',events:[
+    {id:'e16',name:'Jardim Botânico de SP',emoji:'🌿',time:'09:00',cat:'natureza',isMoved:true,
+     addr:'Av. Miguel Stéfano, 3687 — Água Funda, São Paulo',
+     metro:['🔵 Jabaquara (Linha 1 — Azul) + ônibus 4771'],
+     desc:'Jardim Botânico com 361 hectares e uma das maiores reservas de Mata Atlântica urbana do mundo. Estufas históricas com palmeiras imperiais, jardim japonês belíssimo e trilhas ecológicas na mata.',
+     what:'Começar pelas Estufas Históricas (palmeiras centenárias impressionantes), depois o Jardim Japonês. Fazer a trilha ecológica na Mata Atlântica — 1h de pura natureza urbana. Chegar às 9h para aproveitar o frescor. Estima-se 2-3h.'},
+    {id:'e17',name:'Zoológico de São Paulo',emoji:'🦁',time:'12:30',cat:'lazer',isMoved:true,
+     addr:'Av. Miguel Stéfano, 4241 — Água Funda, São Paulo',
+     metro:['🔵 Jabaquara (Linha 1 — Azul) + ônibus'],
+     desc:'Um dos maiores zoológicos do mundo, com 3.200+ animais de 300 espécies. Fica ao lado do Jardim Botânico na mesma área verde do Parque Estadual das Fontes do Ipiranga. Terça = menos filas!',
+     what:'Ver os grandes felinos, gorilas, elefantes, girafas e aves tropicais. O zoológico é enorme — pegar o mapa na entrada e planejar o roteiro. Levar protetor solar e água. Estima-se 3-4h. Muito mais tranquilo em dia de semana!'},
+  ]},
+  {id:'d6',date:'08/04',full:'2026-04-08',dow:'Quarta-feira',theme:'Experiências Indoor',emoji:'🪞',events:[
+    {id:'e18',name:'Museu das Ilusões',emoji:'🪞',time:'10:00',cat:'lazer',
+     addr:'R. Augusta, 975 — Consolação, São Paulo',
+     metro:['🟢 Consolação (Linha 2 — Verde)'],
+     desc:'Museu interativo com ilusões ópticas, hologramas, salas imersivas e instalações que desafiam a percepção visual. Perfeito para fotos criativas e muito divertido em grupo. Fica perto do Airbnb!',
+     what:'Aproveitar todas as salas para fotos épicas: sala de espelhos infinitos, ilusão de tamanho, túnel rotativo, hologramas. Reservar ingresso online para evitar fila. Estima-se 1,5-2h. A 5 min a pé do Airbnb!'},
+    {id:'e19',name:'Rage Room',emoji:'😤',time:'13:00',cat:'lazer',
+     addr:'São Paulo — pesquisar e reservar com antecedência',
+     metro:['Variável conforme localização escolhida'],
+     desc:'Sala de destruição controlada onde você pode quebrar objetos com equipamentos de segurança completos. Uma experiência única de catarse e diversão total! Muito popular em SP.',
+     what:'Equipamentos de proteção fornecidos. Escolher os objetos para destruir e liberar a energia! Sessão dura ~20-30min. Pesquisar opções: Manda Bala Rage Room, Estoura SP. Reservar com antecedência — costuma lotar!'},
+    {id:'e20',name:'Escape Room',emoji:'🧩',time:'15:30',cat:'lazer',
+     addr:'São Paulo — a definir pelo grupo',
+     metro:['Variável conforme localização escolhida'],
+     desc:'Jogo de fuga onde o grupo precisa resolver puzzles e encontrar pistas para escapar dentro do limite de tempo. Ótimo para trabalho em equipe e gargalhadas! SP tem ótimas opções.',
+     what:'Pesquisar as melhores opções: Fox in a Box SP, Mind Trap, Escape60. Reservar com antecedência. Escolher temática que agrade o grupo. Perfeito para 4 pessoas — vocês são o número ideal! Estima-se 1-1,5h.'},
+    {id:'e21',name:'Sal Gastronomia',emoji:'🍽️',time:'20:00',cat:'gastronomia',
+     addr:'Parque Ibirapuera — próx. portão 10, São Paulo',
+     metro:['🔴 Ana Rosa + ônibus (Linha 2)'],
+     desc:'Restaurante sofisticado dentro do Parque Ibirapuera, com culinária brasileira contemporânea do chef Henrique Fogaça. Um dos mais badalados de SP — vista para o parque à noite é mágica.',
+     what:'Jantar especial! Reservar mesa com antecedência (muito concorrido). Experimentar os pratos autorais do chef. Pedir o trio de carnes ou o bacalhau. A vista para o parque iluminado à noite é inesquecível.'},
+  ]},
+  {id:'d7',date:'09/04',full:'2026-04-09',dow:'Quinta-feira',theme:'Centro Histórico',emoji:'🏛️',events:[
+    {id:'e22',name:'Theatro Municipal',emoji:'🎭',time:'10:00',cat:'cultura',
+     addr:'Praça Ramos de Azevedo, s/n — Centro Histórico, São Paulo',
+     metro:['🔴 Anhangabaú (Linha 3 — Vermelha)'],
+     desc:'Um dos edifícios mais belos de SP, construído em 1911 no estilo Ecletismo europeu. Palco de óperas, balés e apresentações da Sinfônica do Estado. Fachada neoclássica deslumbrante.',
+     what:'Fazer visita guiada ao interior (verificar horários e disponibilidade). Fotografar a fachada e a Praça Ramos de Azevedo. Ver se há espetáculos durante sua visita. A praça em frente tem ótimas fotos do teatro. Tour: ~1h.'},
+    {id:'e23',name:'Mercado Municipal de SP',emoji:'🥩',time:'11:30',cat:'gastronomia',
+     addr:'R. da Cantareira, 306 — Centro, São Paulo',
+     metro:['🔴 São Bento (Linha 3 — Vermelha)'],
+     desc:'O Mercadão — um dos mercados mais famosos do Brasil desde 1933. Mais de 200 boxes com produtos frescos, gastronomia e produtos típicos. Os vitrais art nouveau do prédio são um patrimônio.',
+     what:'OBRIGATÓRIO: pastel de bacalhau no Box do Minhoca (fila vale a pena!) e sanduíche de mortadela gigante no Bar do Mané. Provar frutas exóticas. Ver os vitrais históricos. Chegar antes das 12h para pegar as melhores opções!'},
+    {id:'e24',name:'Rua 25 de Março',emoji:'🛍️',time:'13:30',cat:'compras',isNew:true,
+     addr:'Rua 25 de Março — Centro, São Paulo',
+     metro:['🔴 São Bento (Linha 3 — Vermelha)'],
+     desc:'A rua comercial mais famosa de SP e uma das mais movimentadas do Brasil. Produtos variados a preços de atacado — desde artigos de festa a eletrônicos, tecidos, fantasias e itens para casa.',
+     what:'Comprar presentes, souvenirs e produtos nacionais a ótimos preços. Fica a 5 min a pé do Mercadão! Explorar as galerias internas. Atenção: área movimentada, cuidado com bolsas e celular. Estima-se 1-2h de compras.'},
+    {id:'e25',name:'Viaduto do Chá — foto',emoji:'📸',time:'15:30',cat:'cultura',isNew:true,
+     addr:'Viaduto do Chá — Centro Histórico, São Paulo',
+     metro:['🔴 Anhangabaú (Linha 3 — Vermelha)'],
+     desc:'Um dos símbolos do centro histórico de SP. Do viaduto há uma vista única do Vale do Anhangabaú e do Teatro Municipal — uma das fotografias mais icônicas da cidade.',
+     what:'Parada rápida (~20min) para fotos panorâmicas. Vista lindíssima do Vale do Anhangabaú. Fica a caminho do Sampa Sky e a poucos passos do Anhangabaú. Ótimo para fotos no fim da tarde!'},
+    {id:'e26',name:'Sampa Sky',emoji:'🌆',time:'16:30',cat:'lazer',
+     addr:'Ed. Martinelli, R. Líbero Badaró, 504 — Centro, São Paulo',
+     metro:['🔴 São Bento (Linha 3 — Vermelha)'],
+     desc:'Terraço do Edifício Martinelli (1929) — um dos primeiros arranha-céus de SP. Vista panorâmica 360° do centro histórico e da skyline paulistana. Um dos pontos de observação mais charmosos da cidade.',
+     what:'Ir no final da tarde para ver o pôr do sol sobre a cidade — vista incrível! Reservar ingresso online com antecedência. Leva ~1h. Ótimo ponto fotográfico. O edifício em si é uma joia histórica dos anos 20.'},
+  ]},
+  {id:'d8',date:'10/04',full:'2026-04-10',dow:'Sexta-feira',theme:'Cultura + Liberdade',emoji:'🖼️',events:[
+    {id:'e27',name:'Pinacoteca de São Paulo',emoji:'🖼️',time:'10:00',cat:'cultura',
+     addr:'Praça da Luz, 2 — Luz, São Paulo',
+     metro:['🔵 Luz (Linha 1 — Azul / CPTM L7)'],
+     desc:'O museu de artes visuais mais antigo de SP (1905), com acervo de arte brasileira do séc. XIX ao contemporâneo. Instalado em prédio histórico lindíssimo com jardim de esculturas externo.',
+     what:'Ver a coleção de arte brasileira: Portinari, Di Cavalcanti, Tarsila do Amaral. Conferir exposição temporária. O jardim com esculturas ao redor do prédio é perfeito para fotos. A Pinacoteca do Estado fica ao lado — dois museus em um passeio. Estima-se 2h.'},
+    {id:'e28',name:'Museu Catavento',emoji:'⚗️',time:'12:30',cat:'cultura',
+     addr:'Av. Mercúrio, s/n — Brás, São Paulo',
+     metro:['🔴 Brás (Linha 3 — Vermelha / CPTM)'],
+     desc:'Museu de ciências interativo no histórico Palácio das Indústrias (1924). Mais de 250 experimentos em Universo, Vida, Engenho e Sociedade. Muito divertido e diferente dos museus tradicionais.',
+     what:'Brincar com os experimentos: esfera de Van de Graaff, telescópio solar, simulador de terremotos, DNA gigante. Animado para qualquer faixa etária! Fica perto do Brás e Liberdade. Estima-se 1,5-2h.'},
+    {id:'e29',name:'Brás — Compras',emoji:'🛍️',time:'14:30',cat:'compras',
+     addr:'Bairro do Brás — São Paulo',
+     metro:['🔵🔴 Brás (Linha 3 — Vermelha / CPTM)'],
+     desc:'O maior polo de moda popular e atacadista do Brasil. Roupas, acessórios, calçados e produtos de todos os tipos a preços muito abaixo do varejo. Galerias cheias de opções.',
+     what:'Explorar Galeria Presidente, Galeria do Brás e galerias ao longo da R. Oriente. Ótimo para comprar roupas de verão, lingeries, acessórios e moda. Deixar espaço na mala! Área movimentada — cuidado com bolsas.'},
+    {id:'e30',name:'Bairro da Liberdade',emoji:'🍜',time:'17:00',cat:'gastronomia',
+     addr:'Bairro da Liberdade — São Paulo',
+     metro:['🔵 Liberdade (Linha 1 — Azul)'],
+     desc:'O maior bairro japonês fora do Japão, com forte cultura asiática (japonesa, coreana e chinesa). Famoso pela gastronomia, lojas de produtos importados, mangás, animes e arquitetura única com lanternas vermelhas.',
+     what:'Jantar em um restaurante japonês autêntico (Goshiki, restaurantes na Rua Galvão Bueno). Comprar snacks japoneses, doces e produtos importados. Visitar lojas de mangá e cosplay. Uma experiência cultural única dentro de SP!'},
+  ]},
+  {id:'d9',date:'11/04',full:'2026-04-11',dow:'Sábado',theme:'Titanic + Descanso',emoji:'🚢',events:[
+    {id:'e31',name:'Exposição Titanic',emoji:'🚢',time:'10:00',cat:'cultura',isWarn:true,
+     addr:'Shopping Eldorado, Av. Rebouças, 3970 — Pinheiros, São Paulo (piso –2SS)',
+     metro:['🟢 Faria Lima ou Pinheiros (Linha 4 — Amarela)'],
+     desc:'Exposição imersiva com 150+ artefatos originais do Titanic, recriações de ambientes do navio em tamanho real, projeções 3D e opção de realidade virtual para explorar os destroços. Experiência muito bem produzida.',
+     what:'Verificar se a exposição ainda está em cartaz em Abril 2026 (temporada original até março/26 — confirmar extensão). Reservar ingressos online pelo site oficial ou Fever. Duração ~60-90min. Levar fones de ouvido para o audioguia!'},
+    {id:'e32',name:'Tarde livre / Compras finais',emoji:'🌅',time:'14:00',cat:'lazer',isNew:true,
+     addr:'A definir pelo grupo',
+     metro:['Variável'],
+     desc:'Tempo livre para descansar, fazer compras de última hora no bairro, revisitar um lugar favorito da viagem ou simplesmente aproveitar o Airbnb antes do último dia.',
+     what:'Opções: voltar à Rua Augusta para compras finais, visitar uma cafeteria especial de SP (Holy Grain, Suplicy), jantar de despedida em algum lugar especial, ou descansar para o dia da viagem amanhã.'},
+  ]},
+  {id:'d10',date:'12/04',full:'2026-04-12',dow:'Domingo',theme:'Volta',emoji:'🏠',events:[
+    {id:'e33',name:'Check-out & Café Final',emoji:'☕',time:'10:00',cat:'hospedagem',
+     addr:'Airbnb — Rua Sergipe, 254, Consolação, São Paulo',
+     metro:['🟢 Consolação (Linha 2 — Verde)'],
+     desc:'Último dia em São Paulo! Check-out do Airbnb e últimos momentos na cidade que ficou no coração.',
+     what:'Organizar malas e fazer check-out. Tomar um café ou brunch em algum lugar próximo. Tirar a foto final na frente do Airbnb! Guardar malas na consigna do terminal Tietê se necessário para explorar mais um pouco.'},
+    {id:'e34',name:'Regresso — Terminal Tietê',emoji:'🚌',time:'12:00',cat:'transporte',
+     addr:'Av. Cruzeiro do Sul, 1800 — Santana, São Paulo',
+     metro:['🔵 Tietê (Linha 1 — Azul)'],
+     desc:'De volta para casa carregando memórias e lembranças de SP!',
+     what:'Pegar metrô Consolação → Sé → Tietê (~35min). Chegar ao terminal com 1h de antecedência. Carregar fotos, lembranças e histórias incríveis de São Paulo!'},
+  ]},
+];
+
+const CAT_LABELS={transporte:'Transporte',hospedagem:'Hospedagem',compras:'Compras',gastronomia:'Gastronomia',cultura:'Cultura & Arte',natureza:'Natureza',lazer:'Lazer & Entretenimento'};
+const CAT_COLORS={transporte:'#4DA6FF',hospedagem:'#9B72FF',compras:'#F0A500',gastronomia:'#E8572A',cultura:'#9B72FF',natureza:'#2ECC71',lazer:'#FF7AC6'};
+const GRADIENT={transporte:'linear-gradient(135deg,#0d1b35,#1a3a6b)',hospedagem:'linear-gradient(135deg,#1a0d35,#3a1a6b)',compras:'linear-gradient(135deg,#2a1a00,#5a3d00)',gastronomia:'linear-gradient(135deg,#2a0d00,#6b1f00)',cultura:'linear-gradient(135deg,#1a0a2e,#3a1a6e)',natureza:'linear-gradient(135deg,#0a2a1a,#1a5c34)',lazer:'linear-gradient(135deg,#2a0a1e,#6b1a4a)'};
+
+let S={
+  view:'cron',
+  selDay:null,
+  editEvId:null,
+  times:JSON.parse(localStorage.getItem('sp26_times')||'{}'),
+  notes:JSON.parse(localStorage.getItem('sp26_notes')||'[]'),
+  parts:JSON.parse(localStorage.getItem('sp26_parts')||'["Participante 1","Participante 2","Participante 3","Participante 4"]'),
+};
+
+function save(){
+  localStorage.setItem('sp26_times',JSON.stringify(S.times));
+  localStorage.setItem('sp26_notes',JSON.stringify(S.notes));
+  localStorage.setItem('sp26_parts',JSON.stringify(S.parts));
+}
+
+function getTime(id,def){return S.times[id]||def;}
+
+function setView(v,el){
+  document.querySelectorAll('.view').forEach(x=>x.classList.remove('on'));
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('on'));
+  document.getElementById('view-'+v).classList.add('on');
+  el.classList.add('on');
+  document.getElementById('changesDiv').style.display=v==='cron'?'block':'none';
+  if(v==='cal')renderCal();
+  if(v==='notes')renderNotes();
+  S.view=v;
+}
+
+// CRONOGRAMA
+function renderCron(){
+  const c=document.getElementById('cronContainer');
+  c.innerHTML=DAYS.map(day=>`
+    <div class="day">
+      <div class="day-hd">
+        <div class="day-num">${day.date}</div>
+        <div><div class="day-dow">${day.dow}</div><div class="day-theme">${day.emoji} ${day.theme}</div></div>
+        <div class="day-count">${day.events.length} atividade${day.events.length>1?'s':''}</div>
+      </div>
+      <div class="events">
+        ${day.events.map(ev=>{
+          let cls='ecard';
+          let badge='';
+          if(ev.isNew){cls+=' new-item';badge='<span class="badge new-b">✦ novo</span>';}
+          if(ev.isMoved){cls+=' moved-item';badge='<span class="badge moved-b">↔ realocado</span>';}
+          if(ev.isWarn){badge='<span class="badge warn-b">⚠ verificar</span>';}
+          return`<div class="${cls}" onclick="openPlace('${ev.id}')">
+            ${badge}
+            <div class="e-ico">${ev.emoji}</div>
+            <div class="e-info">
+              <div class="e-name">${ev.name}</div>
+              <div class="e-addr">${ev.addr.split('—')[0].trim()}</div>
+            </div>
+            <div class="e-time" onclick="openTE(event,'${ev.id}','${ev.name.replace(/'/g,"\\'")}')">
+              ${getTime(ev.id,ev.time)}
+            </div>
+            <div class="e-arr">›</div>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+// PLACE MODAL
+function findEv(id){
+  for(const d of DAYS)for(const e of d.events)if(e.id===id)return e;
+  return null;
+}
+function openPlace(id){
+  const ev=findEv(id);if(!ev)return;
+  document.getElementById('mCat').textContent=CAT_LABELS[ev.cat]||ev.cat;
+  document.getElementById('mTitle').textContent=ev.name;
+  document.getElementById('mAddr').innerHTML='📍 '+ev.addr;
+  document.getElementById('mDesc').textContent=ev.desc;
+  document.getElementById('mWhat').textContent=ev.what;
+  const mp=document.getElementById('mMetro');
+  mp.innerHTML=(ev.metro||[]).map(m=>`<span class="metro-pill">🚇 ${m}</span>`).join('');
+  const img=document.getElementById('mImg');
+  img.innerHTML=`<div style="width:100%;height:210px;display:flex;align-items:center;justify-content:center;font-size:5rem;background:${GRADIENT[ev.cat]||GRADIENT.cultura};border-radius:0">${ev.emoji}</div>`;
+  document.getElementById('placeOverlay').classList.add('on');
+}
+function closePlaceModal(e){
+  if(!e||e.target===document.getElementById('placeOverlay')||!e){
+    document.getElementById('placeOverlay').classList.remove('on');
+  }
+}
+
+// TIME EDIT
+function openTE(e,id,name){
+  e.stopPropagation();
+  S.editEvId=id;
+  document.getElementById('teTitle').textContent='Horário: '+name;
+  const cur=getTime(id,findEv(id)?.time||'10:00');
+  document.getElementById('teInput').value=cur;
+  document.getElementById('teOverlay').classList.add('on');
+}
+function closeTE(){document.getElementById('teOverlay').classList.remove('on');S.editEvId=null;}
+function confirmTE(){
+  if(!S.editEvId)return;
+  S.times[S.editEvId]=document.getElementById('teInput').value;
+  save();closeTE();renderCron();
+}
+
+// CALENDAR
+function renderCal(){
+  const tripMap={};
+  DAYS.forEach(d=>{tripMap[d.full]=d;});
+  const dows=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+  const firstDay=new Date(2026,3,1).getDay();
+  const total=30;
+  let g=document.getElementById('calGrid');
+  g.innerHTML=dows.map(d=>`<div class="cal-dw">${d}</div>`).join('');
+  for(let i=0;i<firstDay;i++)g.innerHTML+=`<div class="cal-d"></div>`;
+  for(let d=1;d<=total;d++){
+    const ds=`2026-04-${String(d).padStart(2,'0')}`;
+    const td=tripMap[ds];
+    const isSel=S.selDay===ds;
+    g.innerHTML+=`<div class="cal-d${td?' trip':''}${isSel?' sel':''}" onclick="${td?`selDay('${ds}')`:''}">
+      <div>${d}</div>
+      ${td?`<div class="cal-dots">${td.events.slice(0,4).map(()=>'<div class="cal-dot"></div>').join('')}</div>`:''}
+    </div>`;
+  }
+  const panel=document.getElementById('calPanel');
+  if(S.selDay&&tripMap[S.selDay]){
+    const day=tripMap[S.selDay];
+    panel.innerHTML=`<div class="cal-panel">
+      <div class="cal-panel-hd">${day.emoji} ${day.date} — ${day.theme}</div>
+      ${day.events.map(ev=>`
+        <div class="cal-ev" onclick="openPlace('${ev.id}')">
+          <div style="font-size:1.3rem">${ev.emoji}</div>
+          <div style="flex:1"><div style="font-size:.88rem;font-weight:500">${ev.name}</div><div style="font-size:.74rem;color:#8A9BB0">${getTime(ev.id,ev.time)}</div></div>
+          <div style="color:#5A6B80">›</div>
+        </div>
+      `).join('')}
+    </div>`;
+  }else{
+    panel.innerHTML=`<div class="cal-hint">Clique em um dia com atividades para ver o roteiro</div>`;
+  }
+}
+function selDay(ds){S.selDay=S.selDay===ds?null:ds;renderCal();}
+
+// NOTES
+function renderNotes(){
+  const partSel=document.getElementById('noteWho');
+  if(partSel)partSel.innerHTML=S.parts.map((p,i)=>`<option value="${i}">${p}</option>`).join('');
+  const daySel=document.getElementById('noteDay');
+  if(daySel)daySel.innerHTML=`<option value="">Geral</option>`+DAYS.map(d=>`<option value="${d.date}">${d.date} — ${d.theme}</option>`).join('');
+  renderPartGrid();
+  renderNotesList();
+}
+function renderPartGrid(){
+  const g=document.getElementById('partGrid');if(!g)return;
+  const avClasses=['av0','av1','av2','av3','av4'];
+  g.innerHTML=S.parts.map((p,i)=>`
+    <div class="part-item">
+      <div class="avatar ${avClasses[i%5]}">${p.slice(0,2).toUpperCase()}</div>
+      <input class="inp" style="padding:5px 8px;font-size:.82rem;" value="${p}" oninput="updPart(${i},this.value)" placeholder="Nome">
+    </div>
+  `).join('');
+}
+function updPart(i,v){S.parts[i]=v;save();const sel=document.getElementById('noteWho');if(sel)sel.options[i].text=v;}
+function addNote(){
+  const who=parseInt(document.getElementById('noteWho').value);
+  const text=document.getElementById('noteText').value.trim();
+  const day=document.getElementById('noteDay').value;
+  if(!text)return;
+  const now=new Date();
+  const dt=now.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'})+' '+now.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+  S.notes.push({who,text,day,dt});
+  save();
+  document.getElementById('noteText').value='';
+  renderNotesList();
+}
+function deleteNote(i){if(confirm('Remover essa nota?')){S.notes.splice(i,1);save();renderNotesList();}}
+function renderNotesList(){
+  const list=document.getElementById('notesList');if(!list)return;
+  if(!S.notes.length){list.innerHTML='<div class="notes-empty">Nenhuma nota ainda. Seja o(a) primeiro(a) a adicionar uma dica! 👋</div>';return;}
+  const avC=['av0','av1','av2','av3','av4'];
+  list.innerHTML=S.notes.slice().reverse().map((n,ri)=>{
+    const realI=S.notes.length-1-ri;
+    const name=S.parts[n.who]||'Participante';
+    const av=name.slice(0,2).toUpperCase();
+    return`<div class="note">
+      <div class="note-hd">
+        <div class="n-author"><div class="avatar ${avC[n.who%5]}">${av}</div>${esc(name)}${n.day?` <span style="font-size:.72rem;color:#8A9BB0">· ${n.day}</span>`:''}</div>
+        <div style="display:flex;align-items:center;gap:6px"><span class="n-date">${n.dt}</span><button class="n-del" onclick="deleteNote(${realI})">✕</button></div>
+      </div>
+      <div class="n-text">${esc(n.text).replace(/\n/g,'<br>')}</div>
+    </div>`;
+  }).join('');
+}
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+// INIT
+renderCron();
+</script>
+</body>
+</html>
